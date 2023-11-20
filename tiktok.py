@@ -35,46 +35,53 @@ def like3like_login_first():
     for cookies_totel in os.listdir(os.getcwd()):
         cookies_totel_1 = cookies_totel.split('_cookies')[0]
         if cookies_totel_1=='like':
-            email = cookies_totel.split('like_cookies_')[-1].split('.pkl')[0]
-            print(email)
-            password = '1234thelove'
-            driver.get("https://www.like4like.org/login/")
-            page_height = driver.execute_script("return document.body.scrollHeight;")
-            driver.set_window_size(1920, page_height)
-            time.sleep(2)
-            driver.find_element(By.ID, 'username').send_keys(email)
-            time.sleep(2)
-            driver.find_element(By.ID, 'password').send_keys(password)
-            time.sleep(2)
-            driver.find_element(By.ID, 'password').send_keys(Keys.ENTER)
-            time.sleep(1)
+            driver.get("https://www.like4like.org/#social-media-platform-list")
+            cookies = pickle.load(open('{}'.format(cookies_totel), "rb"))
+            for cookie in cookies:
+                try:
+                    driver.add_cookie(cookie)
+                except Exception as ss:
+                    print(ss)
+                    continue
             driver.get("https://www.like4like.org/user/")
             time.sleep(10)
             current_url = driver.current_url
             if current_url=='https://www.like4like.org/user/':
-                print(current_url)
-                driver.get("https://www.like4like.org/#social-media-platform-list")
-                time.sleep(1)
-                cookies_add = "like_cookies_{}.pkl".format(email)
-                pickle.dump(driver.get_cookies(), open("like_cookies_{}.pkl".format(email), "wb"))
-
+                print('login_cookies')
             else:
-                print('else')
-                driver.get("https://www.like4like.org/#social-media-platform-list")
-                cookies = pickle.load(open('{}'.format(cookies_totel), "rb"))
-                for cookie in cookies:
-                    try:
-                        driver.add_cookie(cookie)
-                    except Exception as ss:
-                        print(ss)
-                        continue
-                driver.get("https://www.like4like.org/user/")
+                print('false_cookies')
+                email = cookies_totel.split('like_cookies_')[-1].split('.pkl')[0]
+                print(email)
+                password = '1234thelove'
+                driver.get("https://www.like4like.org/login/")
+                time.sleep(2)
+                driver.get("https://www.like4like.org/login/")
+                time.sleep(2)
+                page_height = driver.execute_script("return document.body.scrollHeight;")
+                driver.set_window_size(1920, page_height)
+                time.sleep(2)
+                driver.find_element(By.ID, 'username').send_keys(email)
+                time.sleep(2)
+                driver.find_element(By.ID, 'password').send_keys(password)
+                time.sleep(2)
+                driver.find_element(By.ID, 'password').send_keys(Keys.ENTER)
                 time.sleep(1)
+                driver.get("https://www.like4like.org/user/")
+                time.sleep(10)
                 current_url = driver.current_url
                 if current_url=='https://www.like4like.org/user/':
-                    print('login_cookies')
+                    print(current_url)
+                    driver.get("https://www.like4like.org/#social-media-platform-list")
+                    time.sleep(1)
+                    cookies_add = "like_cookies_{}.pkl".format(email)
+                    pickle.dump(driver.get_cookies(), open("like_cookies_{}.pkl".format(email), "wb"))
                 else:
-                    print('false_cookies')
+                    print('false_login')
+                    print('false_login')
+                    print('false_login')
+                    break
+
+
 
 def check_driver_open():
     try:
@@ -133,7 +140,7 @@ def failed_success_minutes():
 def follow_tiktok():
     my_list_like = []
     try:
-        with open('unfollowing.txt', 'r') as file:
+        with open('unfollowing_tiktok.txt', 'r') as file:
             flowws = file.readlines()
         for addfw in flowws:    
             my_list_like.append(addfw.strip())
@@ -142,8 +149,9 @@ def follow_tiktok():
     driver.get("https://www.like4like.org/user/earn-tiktok-follow.php")
     page_height = driver.execute_script("return document.body.scrollHeight;")
     driver.set_window_size(1920, page_height)
+    con = 0
 
-    for s in range(200):
+    for s in range(202):
         try:
             element_control_click = driver.find_element(By.CSS_SELECTOR,"a[class^='cursor earn_pages_button profile_view_img']")
             onclick_value = element_control_click.get_attribute("onclick").split('tiktok.com/')[-1].split("'")[0]
@@ -183,10 +191,68 @@ def follow_tiktok():
                                 break
                         except:
                             pass
+                    time.sleep(4)
                     driver.close()
                     driver.switch_to.window(driver.window_handles[0])
                     time.sleep(4)
                     driver.find_element(By.CSS_SELECTOR, '[alt="Click On The Button To Confirm Interaction!"]').click()
+                    con +=1
+                    if int(con) ==int(50):
+                        try:
+                            con = 0
+                            for cookies_totel in os.listdir(os.getcwd()):
+                                cookies_totel_1 = cookies_totel.split('_cookies')[0]
+                                if cookies_totel_1=='like':
+                                    email_mail = cookies_totel.split('like_cookies_')[-1].split('.pkl')[0]
+                                    
+                                    totel_mail = email_mail.split('_')[-1]
+                                    totel_mail_new = int(700)+int(totel_mail) 
+                                    print(totel_mail_new)
+                                    # Set your GitHub access token
+                                    access_token = "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"
+
+                                    # Set the repository name
+                                    repository_name = "you{}".format(totel_mail_new)
+
+                                    # Set the local file path (assuming the files are text files)
+                                    local_file_path = "unfollowing_tiktok.txt"
+                                    #print("Local File Path:", local_file_path)
+
+                                    # Create a connection to the GitHub repository using your access token
+                                    g = Github(access_token)
+
+                                    # Find the repository using the username and repository name
+                                    repo = g.get_user().get_repo(repository_name)
+
+                                    # Get the current file if it exists
+                                    file_path = totel_email
+                                    branch = "main"
+                                    try:
+                                        file = repo.get_contents(file_path, ref=branch)
+                                        # Get the current SHA of the file
+                                        sha = file.sha
+                                    except Exception as e:
+                                        # If the file doesn't exist in the repository, set an empty SHA
+                                        sha = ""
+                                        print("File not found:", e)
+
+                                    # Upload the file to the repository
+                                    with open(local_file_path, "rb") as file:
+                                        content = file.read()
+                                        message = "commit message"
+                                        try:
+                                            response = repo.update_file(file_path, message, content, sha, branch=branch)
+                                            print("Upload Successful:")#, response)
+                                        except Exception as ex:
+                                            print("Error during upload:", ex)
+                                    #print("Repository Name:", repository_name)
+
+                                    #print(email,paswoc)
+                                    print('finsh_unfollows')
+                                                    
+                        except Exception as ex:
+                                print("Error:", ex)
+
                                                                 
         except Exception as s:
             print(s)
