@@ -48,6 +48,7 @@ def like3like_login_first():
             current_url = driver.current_url
             if current_url=='https://www.like4like.org/user/':
                 print('login_cookies')
+                print('ttps://www.like4like.org/user/)
             else:
                 print('false_cookies')
                 email = cookies_totel.split('like_cookies_')[-1].split('.pkl')[0]
